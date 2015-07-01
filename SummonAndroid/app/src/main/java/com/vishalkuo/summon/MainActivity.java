@@ -1,5 +1,6 @@
 package com.vishalkuo.summon;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -27,6 +29,7 @@ public class MainActivity extends Activity {
     private AlertDialog alertDialog;
     private String tableNo;
     private TextView welcomeView;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,10 @@ public class MainActivity extends Activity {
         welcomeView = (TextView)findViewById(R.id.welcomeView);
         welcomeView.setText("You are currently at table: " + tableNo);
         c = this;
+
+        actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         /**
          * On click listeners
@@ -110,6 +117,9 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(c, "Comic-Sans not enabled yet (ultra-beta)", Toast.LENGTH_LONG).show();
+        }else if (id == android.R.id.home){
+            this.finish();
             return true;
         }
 

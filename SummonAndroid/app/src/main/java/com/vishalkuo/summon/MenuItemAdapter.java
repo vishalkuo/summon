@@ -39,7 +39,10 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.viewHo
 
     @Override
     public int getItemCount() {
-        return resultList.size();
+        if (resultList != null){
+            return resultList.size();
+        }
+        else return 0;
     }
 
 

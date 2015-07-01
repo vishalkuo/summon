@@ -14,4 +14,11 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp"/>
 
+    <ProgressBar
+        style="@android:style/Widget.Material.ProgressBar.Large"
+        android:layout_centerInParent="true"
+        android:id = "@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

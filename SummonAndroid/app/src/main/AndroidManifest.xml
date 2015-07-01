@@ -7,12 +7,12 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/title"
+        android:theme="@style/MyCustomTheme" >
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/title" >
         </activity>
         <activity
 
@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".CustomerOrderActivity"
-            android:label="@string/title_activity_customer_order" >
+            android:label="@string/title" >
         </activity>
     </application>
 

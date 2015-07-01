@@ -1,5 +1,6 @@
 package com.vishalkuo.summon;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -15,6 +16,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,8 @@ public class CustomerOrderActivity extends Activity {
     private RecyclerView recyclerView;
     private Context c;
     private AlertDialog alertDialog;
-
+    private ActionBar actionBar;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,8 +43,13 @@ public class CustomerOrderActivity extends Activity {
         recyclerView.setHasFixedSize(true);
 
         c = this;
+        actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+        MenuItemAdapter menuItemAdapter = new MenuItemAdapter(null,c);
+        recyclerView.setAdapter(menuItemAdapter);
         recyclerView.setLayoutManager(llm);
 
         new recycleInflater(new OnAsyncFinish() {
@@ -67,6 +76,9 @@ public class CustomerOrderActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Toast.makeText(c, "Comic-Sans not enabled yet (ultra-beta)", Toast.LENGTH_LONG).show();
+        }else if (id == android.R.id.home){
+            this.finish();
             return true;
         }
 
