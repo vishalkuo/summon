@@ -8,6 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit.RestAdapter;
+
 
 public class CustomerOrderActivity extends Activity {
     private RecyclerView recyclerView;
@@ -20,9 +25,9 @@ public class CustomerOrderActivity extends Activity {
 
         recyclerView.setHasFixedSize(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(llm);
 
         new recycleInflater().execute();
     }
@@ -50,14 +55,31 @@ public class CustomerOrderActivity extends Activity {
     }
 
     private class recycleInflater extends AsyncTask<String, Void, MenuItemAdapter>{
+        private List<rInfo> itemInfo = new ArrayList<>();
+        private MenuItemAdapter itemAdapter;
+
         @Override
         protected MenuItemAdapter doInBackground(String... strings) {
-            return null;
+            RestAdapter adapter = new RestAdapter.Builder()
+                    .setEndpoint(ConfigGlobals.CONFIGURL)
+                    .build();
+
+            RetroGet retroTestro = adapter.create(RetroGet.class);
+            List<rInfo> itemStuff = retroTestro.resultList();
+            for (rInfo item : itemStuff) {
+                itemInfo.add(item);
+                itemAdapter = new MenuItemAdapter(itemInfo, getApplicationContext());
+
+            }
+            return itemAdapter;
         }
 
         @Override
-        protected void onPostExecute(MenuItemAdapter menuItemAdapter) {
-            super.onPostExecute(menuItemAdapter);
+        protected void onPostExecute(MenuItemAdapter s) {
+            super.onPostExecute(s);
+
+            recyclerView.setAdapter(s);
+
         }
     }
 }

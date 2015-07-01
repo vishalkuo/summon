@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
         tableNo = CurrentTableSingleton.getInstance().getString();
         refillBtn = (Button)findViewById(R.id.refillBtn);
         checkBtn = (Button)findViewById(R.id.checkBtn);
+        orderBtn = (Button)findViewById(R.id.orderBtn);
         customBtn = (Button)findViewById(R.id.customBtn);
         welcomeView = (TextView)findViewById(R.id.welcomeView);
         welcomeView.setText("You are currently at table: " + tableNo);
@@ -80,6 +82,14 @@ public class MainActivity extends Activity {
                         });
                 alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+
+        orderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(c, CustomerOrderActivity.class);
+                startActivity(i);
             }
         });
     }
