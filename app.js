@@ -6,6 +6,7 @@ var pg = require('pg')
 var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/toast_dev'
 
 app.use(bodyParser.urlencoded({extended: false}));
+//app.use(bodyParser.json())
 
 
 app.get('/', function(req, res){
@@ -19,9 +20,9 @@ app.get('/api/v1/menuItems', function(req, res){
             + "\"MenuGroup_MenuItems\" on id = item_id GROUP BY id ORDER BY id ASC;")
 
 
-        query.on('row', function(row){
-            results.push(row)
-        })
+        query.on('row', function(row) {
+            results.push(row);
+        });
 
         query.on('end', function(){
             client.end();
@@ -29,6 +30,50 @@ app.get('/api/v1/menuItems', function(req, res){
             console.log("200 Successful GET at api/v1/menuItems");
         });
 
+        if (err){
+            console.log(err)
+        }
+    })
+})
+
+app.post('/api/v1/tableRequest', function(req,res){
+    req.io.route('ioTableRequest')
+})
+
+app.io.route('ioTableRequest', function(req){
+    var tableno = req.body.tableno
+    var request = req.body.request
+    var requestCode = req.body.requestCode
+    console.log(tableno)
+    console.log(requestCode)
+    var data = {tableno: req.body.tableno, request: request, requestCode: requestCode};
+    var results = []
+
+    pg.connect(connString, function(err, client, done){
+        var query = client.query('SELECT * FROM restaurantRequests WHERE tableno =' + tableno 
+            +' AND requestCode = ' + requestCode + ';')
+
+
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        query.on('end', function() {
+            if (results.length > 0){
+                var currentCount = results[0].numberofrequests
+                currentCount += 1
+                client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
+                    + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
+                console.log("Successful POST to /api/v1/tableRequest");
+                req.io.respond()
+            }else{
+                client.query('INSERT INTO restaurantRequests(tableno, request, requestCode) VALUES '
+                     + '(' + tableno + ',\'' + request + '\',' + requestCode + ');');
+                console.log("Successful POST to /api/v1/tableRequest");
+                req.io.respond()
+            }
+            client.end()
+        });
         if (err){
             console.log(err)
         }
