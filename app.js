@@ -8,7 +8,7 @@ var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/toast_de
 
 
 app.use(bodyParser.urlencoded({extended: false}));
-//app.use(bodyParser.json())
+app.use(bodyParser.json())
 app.use(express.static(__dirname + '/public'));
 
 //INDEX PARSING

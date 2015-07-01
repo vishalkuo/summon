@@ -33,7 +33,6 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 RestAdapter restAdapter = new RestAdapter.Builder()
                         .setEndpoint(ConfigGlobals.CONFIGURL)
-                        .setLogLevel(RestAdapter.LogLevel.FULL)
                         .build();
 
                 RetroService service = restAdapter.create(RetroService.class);
