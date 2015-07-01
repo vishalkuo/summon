@@ -6,12 +6,35 @@ app.set('view engine', 'jade');
 var pg = require('pg')
 var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/toast_dev'
 
+
 app.use(bodyParser.urlencoded({extended: false}));
 //app.use(bodyParser.json())
 app.use(express.static(__dirname + '/public'));
 
+//INDEX PARSING
+
 app.get('/', function(req, res){
-    res.render('index', {title: 'Vishal\'s Program!'})
+    var results = []
+    pg.connect(connString, function(err, client, done){
+        var query = client.query("SELECT * FROM restaurantRequests WHERE completed = false");
+
+
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        query.on('end', function(){
+            client.end();
+            res.render('index', {title: 'Vishal\'s Program!', data: JSON.stringify(results)})
+
+
+            console.log("200 Successful GET at api/v1/menuItems");
+        });
+
+        if (err){
+            console.log(err)
+        }
+    })
 })
 
 app.get('/api/v1/menuItems', function(req, res){
@@ -47,7 +70,10 @@ app.io.route('ioTableRequest', function(req){
     var requestCode = req.body.requestCode
     console.log(tableno)
     console.log(requestCode)
-    var data = {tableno: req.body.tableno, request: request, requestCode: requestCode, numberofrequests: 1};
+    var dt = new Date();
+    var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+    var data = {tableno: req.body.tableno, request: request, requestCode: requestCode, numberofrequests: 1,
+        currenttime: time};
     var results = []
     pg.connect(connString, function(err, client, done){
         var query = client.query('SELECT * FROM restaurantRequests WHERE tableno =' + tableno 
@@ -65,7 +91,7 @@ app.io.route('ioTableRequest', function(req){
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
                     + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
                 console.log("Successful POST to /api/v1/tableRequest");
-                data.numberofrequests = currentCount;
+                data.numberofrequests = currentCount;                
                 
             }else{
                 client.query('INSERT INTO restaurantRequests(tableno, request, requestCode) VALUES '

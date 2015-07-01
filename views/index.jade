@@ -2,8 +2,11 @@ html
     body
         script(src='//code.jquery.com/jquery-1.11.3.min.js')
         script(src='/socket.io/socket.io.js')
+        script(type='text/javascript').
+            var results = !{(data)}
         script(src='/js/controller.js')
 
 
         h1 #{title}
-        p THIS IS A TEST
+        ul#mainRequests
+            
