@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import at.markushi.ui.CircleButton;
+
 
 public class ZXIngSplash extends Activity {
 
-    private Button scanBtn, nahBtn;
+    private CircleButton scanBtn, nahBtn;
     private Context c;
     private AlertDialog alertDialog;
 
@@ -45,7 +47,7 @@ public class ZXIngSplash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_zxing_splash);
 
-        scanBtn = (Button)findViewById(R.id.scanBtn);
+        scanBtn = (CircleButton)findViewById(R.id.scanBtn);
 
         c = this;
 
@@ -57,7 +59,7 @@ public class ZXIngSplash extends Activity {
             }
         });
 
-        nahBtn = (Button)findViewById(R.id.nahBtn);
+        nahBtn = (CircleButton)findViewById(R.id.nahBtn);
         nahBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
