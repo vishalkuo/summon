@@ -1,21 +1,29 @@
 package com.vishalkuo.summon;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class CustomerOrderActivity extends Activity {
     private RecyclerView recyclerView;
+    private Context c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +33,17 @@ public class CustomerOrderActivity extends Activity {
 
         recyclerView.setHasFixedSize(true);
 
+        c = this;
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(llm);
 
-        new recycleInflater().execute();
+        new recycleInflater(new OnAsyncFinish() {
+            @Override
+            public void asyncDidFinish(String result) {
+                postRequest(result);
+            }
+        }).execute();
     }
 
     @Override
@@ -54,9 +68,40 @@ public class CustomerOrderActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void postRequest(String item){
+        TableRequest tableRequest = new TableRequest(CurrentTableSingleton.getInstance().getString(),
+                "Order: " + item, "0");
+
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint(ConfigGlobals.CONFIGURL)
+                .build();
+
+        RetroService service = restAdapter.create(RetroService.class);
+
+        service.newPostTask(tableRequest, new Callback<String>() {
+            @Override
+            public void success(String s, Response response) {
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    /**
+     * RECYCLER VIEW INFLATER
+     */
     private class recycleInflater extends AsyncTask<String, Void, MenuItemAdapter>{
         private List<rInfo> itemInfo = new ArrayList<>();
         private MenuItemAdapter itemAdapter;
+        public OnAsyncFinish delegate = null;
+
+        public recycleInflater(OnAsyncFinish delegate) {
+            this.delegate = delegate;
+        }
 
         @Override
         protected MenuItemAdapter doInBackground(String... strings) {
@@ -79,6 +124,32 @@ public class CustomerOrderActivity extends Activity {
             super.onPostExecute(s);
 
             recyclerView.setAdapter(s);
+
+            final GestureDetector GESTUREDETECTOR = new GestureDetector(c, new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public boolean onSingleTapUp(MotionEvent e) {
+                    return true;
+                }
+            });
+
+            recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                @Override
+                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+
+                    if (child != null && GESTUREDETECTOR.onTouchEvent(e)){
+                        int i = recyclerView.getChildPosition(child);
+                        String item = itemInfo.get(i).name;
+                        delegate.asyncDidFinish(item);
+                    }
+                        return false;
+                }
+
+                @Override
+                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                }
+            });
 
         }
     }
