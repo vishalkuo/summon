@@ -1,5 +1,6 @@
 package com.vishalkuo.summon;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public class ZXIngSplash extends Activity {
             Intent i = new Intent(c, MainActivity.class);
             startActivity(i);
         }
+
+
     }
 
     @Override
