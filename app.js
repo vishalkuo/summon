@@ -41,7 +41,7 @@ app.get('/', function(req, res){
 app.get('/api/v1/menuItems', function(req, res){
     var results = []
     pg.connect(connString, function(err, client, done){
-        var query = client.query("SELECT id, name, description FROM \"MenuItem\" INNER JOIN " 
+        var query = client.query("SELECT id, name, description, \"basePrice\" FROM \"MenuItem\" INNER JOIN " 
             + "\"MenuGroup_MenuItems\" on id = item_id GROUP BY id ORDER BY id ASC;")
 
 

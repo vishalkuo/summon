@@ -3,13 +3,9 @@ package com.vishalkuo.summon;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.vishalkuo.summon.R;
-import com.vishalkuo.summon.rInfo;
 
 import java.util.List;
 
@@ -18,10 +14,10 @@ import java.util.List;
  */
 public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.viewHolder> {
 
-    private List<rInfo> resultList;
+    private List<MenuItemInfo> resultList;
     private static Context c;
 
-    public MenuItemAdapter(List<rInfo> foodList, Context c) {
+    public MenuItemAdapter(List<MenuItemInfo> foodList, Context c) {
         this.resultList = foodList;
         this.c = c;
     }
@@ -35,7 +31,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.viewHo
 
     @Override
     public void onBindViewHolder(MenuItemAdapter.viewHolder holder, int position) {
-        rInfo itemInfo = resultList.get(position);
+        MenuItemInfo itemInfo = resultList.get(position);
         holder.item.setText(itemInfo.name);
         holder.description.setText(itemInfo.description);
 

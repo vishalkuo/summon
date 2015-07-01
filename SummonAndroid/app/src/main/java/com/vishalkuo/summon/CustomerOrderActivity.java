@@ -1,16 +1,20 @@
 package com.vishalkuo.summon;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ import retrofit.client.Response;
 public class CustomerOrderActivity extends Activity {
     private RecyclerView recyclerView;
     private Context c;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +45,7 @@ public class CustomerOrderActivity extends Activity {
 
         new recycleInflater(new OnAsyncFinish() {
             @Override
-            public void asyncDidFinish(String result) {
+            public void asyncDidFinish(MenuItemInfo result) {
                 postRequest(result);
             }
         }).execute();
@@ -68,34 +73,51 @@ public class CustomerOrderActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void postRequest(String item){
-        TableRequest tableRequest = new TableRequest(CurrentTableSingleton.getInstance().getString(),
-                "Order: " + item, "0");
+    private void postRequest(final MenuItemInfo item){
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ConfigGlobals.CONFIGURL)
-                .build();
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("Order: " + item.name);
+        builder.setMessage("The price of this item is: " + item.basePrice + ". Click OK to order.");
+        builder
 
-        RetroService service = restAdapter.create(RetroService.class);
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        TableRequest tableRequest = new TableRequest(CurrentTableSingleton.getInstance().getString(),
+                                "Order: " + item.name, "0");
 
-        service.newPostTask(tableRequest, new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
+                        RestAdapter restAdapter = new RestAdapter.Builder()
+                                .setEndpoint(ConfigGlobals.CONFIGURL)
+                                .build();
 
-            }
+                        RetroService service = restAdapter.create(RetroService.class);
 
-            @Override
-            public void failure(RetrofitError error) {
+                        service.newPostTask(tableRequest, new Callback<String>() {
+                            @Override
+                            public void success(String s, Response response) {
 
-            }
-        });
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**
      * RECYCLER VIEW INFLATER
      */
     private class recycleInflater extends AsyncTask<String, Void, MenuItemAdapter>{
-        private List<rInfo> itemInfo = new ArrayList<>();
+        private List<MenuItemInfo> itemInfo = new ArrayList<>();
         private MenuItemAdapter itemAdapter;
         public OnAsyncFinish delegate = null;
 
@@ -110,8 +132,8 @@ public class CustomerOrderActivity extends Activity {
                     .build();
 
             RetroGet retroTestro = adapter.create(RetroGet.class);
-            List<rInfo> itemStuff = retroTestro.resultList();
-            for (rInfo item : itemStuff) {
+            List<MenuItemInfo> itemStuff = retroTestro.resultList();
+            for (MenuItemInfo item : itemStuff) {
                 itemInfo.add(item);
                 itemAdapter = new MenuItemAdapter(itemInfo, getApplicationContext());
 
@@ -139,7 +161,7 @@ public class CustomerOrderActivity extends Activity {
 
                     if (child != null && GESTUREDETECTOR.onTouchEvent(e)){
                         int i = recyclerView.getChildPosition(child);
-                        String item = itemInfo.get(i).name;
+                        MenuItemInfo item = itemInfo.get(i);
                         delegate.asyncDidFinish(item);
                     }
                         return false;

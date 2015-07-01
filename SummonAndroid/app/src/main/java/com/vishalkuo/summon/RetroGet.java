@@ -9,5 +9,5 @@ import retrofit.http.GET;
  */
 public interface RetroGet {
     @GET("/api/v1/menuItems")
-    List<rInfo> resultList();
+    List<MenuItemInfo> resultList();
 }

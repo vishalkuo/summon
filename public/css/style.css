@@ -22,7 +22,9 @@ li, ul{
     font-weight: 300;
     font-size: 30px;
     font-style: bold;
-    color: #FFFFFF
+    color: #FFFFFF;
+    cursor: pointer;
+
 }
 .wrapper{
     text-align: center;

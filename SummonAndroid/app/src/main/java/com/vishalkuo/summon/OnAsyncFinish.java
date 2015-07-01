@@ -5,5 +5,5 @@ package com.vishalkuo.summon;
  */
 public interface OnAsyncFinish {
 
-    void asyncDidFinish(String finish);
+    void asyncDidFinish(MenuItemInfo finish);
 }

@@ -35,7 +35,7 @@ function getRidOfItem(idVal){
 }
 
 function appizzle(tableNo, request, currenttime, id){
-    (currenttime[0] == '0') ? currenttime = currenttime.substring(1, 5) : currenttime = currenttime.substring(0, 5)
+    currenttime = currenttime.substring(0, 5);
     //$("#mainRequests").text("");
     $("#mainRequests").append('<li id=\'' + id + '\'> <b>Table ' + tableNo + ":</b> " + request + " requested at: " + currenttime +  '</li>')
     count++;
