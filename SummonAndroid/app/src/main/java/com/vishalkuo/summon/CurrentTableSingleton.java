@@ -1,27 +1,32 @@
 package com.vishalkuo.summon;
 
 /**
- * Created by vishalkuo on 15-07-01.
+ * Created with IntelliJ IDEA.
+ * Date: 13/05/13
+ * Time: 10:36
  */
 public class CurrentTableSingleton {
-    private int currentTable = 0;
+    private static CurrentTableSingleton mInstance = null;
 
-    private static CurrentTableSingleton ourInstance = new CurrentTableSingleton();
+    private String mString;
 
-    public static CurrentTableSingleton getInstance() {
-        return ourInstance;
+    private CurrentTableSingleton(){
+        mString = "0";
     }
 
-    private CurrentTableSingleton() {
+    public static CurrentTableSingleton getInstance(){
+        if(mInstance == null)
+        {
+            mInstance = new CurrentTableSingleton();
+        }
+        return mInstance;
     }
 
-    public int getCurrentTable(){
-        return ourInstance.getCurrentTable();
+    public String getString(){
+        return this.mString;
     }
 
-    public void setCurrentTable(int table){
-        ourInstance.currentTable = table;
+    public void setString(String value){
+        mString = value;
     }
-
-
 }

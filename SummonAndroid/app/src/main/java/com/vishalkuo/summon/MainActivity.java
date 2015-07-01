@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -23,14 +24,19 @@ public class MainActivity extends Activity {
     private Button refillBtn, checkBtn, orderBtn, customBtn;
     private Context c;
     private AlertDialog alertDialog;
+    private String tableNo;
+    private TextView welcomeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tableNo = CurrentTableSingleton.getInstance().getString();
         refillBtn = (Button)findViewById(R.id.refillBtn);
         checkBtn = (Button)findViewById(R.id.checkBtn);
         customBtn = (Button)findViewById(R.id.customBtn);
+        welcomeView = (TextView)findViewById(R.id.welcomeView);
+        welcomeView.setText("You are currently at table: " + tableNo);
         c = this;
 
         /**
@@ -118,7 +124,7 @@ public class MainActivity extends Activity {
                 break;
         }
 
-        TableRequest tableRequest = new TableRequest("1", task, reqCode);
+        TableRequest tableRequest = new TableRequest(tableNo, task, reqCode);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ConfigGlobals.CONFIGURL)
