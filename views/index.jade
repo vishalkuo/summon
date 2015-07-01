@@ -1,12 +1,17 @@
 html
     body
+        link(href='http://fonts.googleapis.com/css?family=Lato:100, 300, 400' rel='stylesheet')
+
         script(src='//code.jquery.com/jquery-1.11.3.min.js')
         script(src='/socket.io/socket.io.js')
+        link(rel='stylesheet', href='/css/style.css')
         script(type='text/javascript').
             var results = !{(data)}
         script(src='/js/controller.js')
 
 
-        h1 #{title}
+        h1 Genie
+        div.wrapper
+            h2 Click an item to fulfill it
         ul#mainRequests
             
