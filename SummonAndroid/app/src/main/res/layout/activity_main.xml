@@ -8,73 +8,69 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></LinearLayout>
-    <TextView
-        android:id = "@+id/genie"
-        android:text="Request?"
-        android:textSize="50dp"
-        android:textStyle="bold|italic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
-        android:textColor="@color/toastOrange"/>
-
-
-    <LinearLayout
-        android:id = "@+id/linearParent"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_alignParentBottom="true"
-        android:weightSum="1.0"
-        android:orientation="vertical">
-        <LinearLayout
-            android:id = "@+id/linearLayoutOne"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:layout_width="fill_parent"
-            android:orientation="horizontal"
-            android:weightSum="1.0">
             <Button
-                android:id="@+id/refillBtn"
-                android:text="Refill"
-                android:layout_weight=".5"
-                android:layout_width="fill_parent"
+                android:id="@+id/customBtn"
+                android:text="Custom Request"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
                 android:elevation="5dp"
-                android:layout_height="fill_parent"
-                android:textSize="12sp" />
+                android:textColor="#FFFFFF"
+                android:textSize="17dp"
+                android:layout_centerInParent="true"
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:background="@drawable/btn_select"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="8dp"
+                />
+            <Button
+                android:id="@+id/orderBtn"
+                android:text="Order (SUPER BETA)"
+                android:elevation="5dp"
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/customBtn"
+                android:textSize="17dp"
+                android:textColor="#FFFFFF"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_select"
+                android:layout_marginTop="8dp"/>
+
             <Button
                 android:id="@+id/checkBtn"
                 android:text="Check"
                 android:elevation="5dp"
-                android:layout_weight=".5"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textSize="12sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:id = "@+id/linearLayoutTwo"
-            android:layout_width="fill_parent"
-            android:orientation="horizontal"
-            android:layout_height="0dp"
-            android:layout_weight=".5"
-            android:layout_below="@id/linearLayoutOne"
-            android:weightSum="1.0">
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/orderBtn"
+                android:textSize="17dp"
+                android:textColor="#FFFFFF"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_select"/>
+
             <Button
-                android:id="@+id/orderBtn"
-                android:text="Order (SUPER BETA)"
-                android:layout_weight=".5"
+                android:id="@+id/refillBtn"
+                android:text="Refill"
+                android:layout_width="190dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/checkBtn"
+                android:textSize="17dp"
                 android:elevation="5dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textSize="12sp" />
-            <Button
-                android:id="@+id/customBtn"
-                android:text="Custom request"
-                android:layout_weight=".5"
-                android:elevation="5dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textSize="12sp" />
-        </LinearLayout>
-    </LinearLayout>
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="40dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/btn_select"/>
+
+            <TextView
+                android:id = "@+id/genie"
+                android:text="Request?"
+                android:textSize="70dp"
+                android:textStyle="bold|italic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="80dp"
+                android:textColor="@color/toastOrange"/>
+
 </RelativeLayout>
