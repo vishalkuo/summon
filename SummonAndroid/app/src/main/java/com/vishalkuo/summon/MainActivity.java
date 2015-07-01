@@ -1,17 +1,56 @@
 package com.vishalkuo.summon;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity {
+    private Button refillBtn, checkBtn, orderBtn, customBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        refillBtn = (Button)findViewById(R.id.refillBtn);
+
+
+        /**
+         * On click listeners
+         */
+        refillBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RestAdapter restAdapter = new RestAdapter.Builder()
+                        .setEndpoint(ConfigGlobals.CONFIGURL)
+                        .setLogLevel(RestAdapter.LogLevel.FULL)
+                        .build();
+
+                RetroService service = restAdapter.create(RetroService.class);
+
+                 service.newPostTask(new TableRequest("1", "Refills", ConfigGlobals.REFILLINT), new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
+            }
+        });
     }
 
     @Override
