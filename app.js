@@ -10,6 +10,7 @@ var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/toast_de
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 app.use(express.static(__dirname + '/public'));
+app.locals.pretty = true;
 
 //INDEX PARSING
 
@@ -45,6 +46,7 @@ app.get('/api/v1/menuItems', function(req, res){
 
 
         query.on('row', function(row) {
+            row.name = row.name.replace(/'/g, '')
             results.push(row);
         });
 
@@ -68,8 +70,6 @@ app.io.route('ioTableRequest', function(req){
     var tableno = req.body.tableno
     var request = req.body.request
     var requestCode = req.body.requestCode
-    console.log(tableno)
-    console.log(requestCode)
     var dt = new Date();
     var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
     var data = {tableno: req.body.tableno, request: request, requestCode: requestCode, numberofrequests: 1,
@@ -85,7 +85,7 @@ app.io.route('ioTableRequest', function(req){
         });
 
         query.on('end', function() {
-            if (results.length > 0){
+            if (results.length > 0 && requestCode != 0){
                 var currentCount = results[0].numberofrequests
                 currentCount += 1
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
@@ -99,6 +99,7 @@ app.io.route('ioTableRequest', function(req){
                 console.log("Successful POST to /api/v1/tableRequest");
                 
             }
+            req.io.broadcast('newRow', data);
             client.end()
         });
         if (err){
@@ -106,8 +107,20 @@ app.io.route('ioTableRequest', function(req){
         }
     })
     
-    req.io.broadcast('newRow', data);
+    
     req.io.respond()
+})
+
+app.post('/api/v1/remove', function(req, res){
+    var remove = req.body.id
+    pg.connect(connString, function(err, client, done){
+        client.query("delete from restaurantRequests where id = " + remove + ";");
+        client.end
+
+        if (err){
+            console.log(err)
+        }
+    })
 })
 
 app.listen(3000)
