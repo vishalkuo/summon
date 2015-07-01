@@ -95,6 +95,7 @@ app.io.route('ioTableRequest', function(req){
 
                 data.update = true;               
                 req.io.broadcast('newRow', data);
+                client.end()
             }else{
                 client.query('INSERT INTO restaurantRequests(tableno, request, requestCode) VALUES '
                      + '(' + tableno + ',\'' + request + '\',' + requestCode + ');');
@@ -103,13 +104,14 @@ app.io.route('ioTableRequest', function(req){
             +' AND requestCode = ' + requestCode + ';')
 
                 idQuery.on('row', function(row){
-                    data.idVal   = row[0].id;
+                    data.idVal   = row.id;
                     data.update = false;
                     req.io.broadcast('newRow', data);
+                    client.end()
                 })
                 
             }
-            client.end()
+            
         });
         if (err){
             console.log(err)
