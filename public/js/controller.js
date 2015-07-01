@@ -22,6 +22,12 @@ function main(){
         getRidOfItem(this.id);
         this.remove();
    });
+
+    $('body').on('click', 'li', function() {
+    // do something
+        getRidOfItem(this.id);
+        this.remove();
+    });
 }
 
 $(document).ready(main);
