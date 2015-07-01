@@ -6,4 +6,7 @@ package com.vishalkuo.summon;
 public class ConfigGlobals {
     public static final String CONFIGURL = "http://172.16.102.146:3000";
     public static final String REFILLINT = "100";
+    public static final String CHECKINT = "200";
+    public static final String CUSTOMINT = "300";
+
 }

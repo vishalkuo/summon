@@ -17,7 +17,7 @@ function main(){
 $(document).ready(main);
 
 function appizzle(tableNo, request, currenttime){
-    (currenttime[0] == '0') ? currenttime = currenttime.substring(1, 5) : currenttime = currenttime.substring(0, 5)
+    currenttime = (new Date).getTime()
 
     $("#mainRequests").append('<li> Table: ' + tableNo + ", request: " + request + " at: " + currenttime +  '</li>')
 }
