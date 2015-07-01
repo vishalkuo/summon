@@ -102,9 +102,13 @@ app.io.route('ioTableRequest', function(req){
                 
                 var idQuery = client.query('SELECT id FROM restaurantRequests WHERE tableno =' + tableno 
             +' AND requestCode = ' + requestCode + ';')
-
+                var test = []
                 idQuery.on('row', function(row){
-                    data.idVal   = row.id;
+                    test.push(row);
+                })
+
+                idQuery.on('end', function(){
+                    data.idVal   = test[test.length -1]
                     data.update = false;
                     req.io.broadcast('newRow', data);
                     client.end()

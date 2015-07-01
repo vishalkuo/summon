@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -108,7 +109,7 @@ public class CustomerOrderActivity extends Activity {
                         service.newPostTask(tableRequest, new Callback<String>() {
                             @Override
                             public void success(String s, Response response) {
-
+                                Log.d("app", "here");
                             }
 
                             @Override
