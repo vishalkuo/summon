@@ -1,3 +1,4 @@
+var express = require('express.io')
 var app = require('express.io')()
 app.http().io()
 var bodyParser = require('body-parser')
@@ -7,7 +8,7 @@ var connString = process.env.DATABASE_URL || 'postgres://localhost:5432/toast_de
 
 app.use(bodyParser.urlencoded({extended: false}));
 //app.use(bodyParser.json())
-
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
     res.render('index', {title: 'Vishal\'s Program!'})
@@ -46,9 +47,8 @@ app.io.route('ioTableRequest', function(req){
     var requestCode = req.body.requestCode
     console.log(tableno)
     console.log(requestCode)
-    var data = {tableno: req.body.tableno, request: request, requestCode: requestCode};
+    var data = {tableno: req.body.tableno, request: request, requestCode: requestCode, numberofrequests: 1};
     var results = []
-
     pg.connect(connString, function(err, client, done){
         var query = client.query('SELECT * FROM restaurantRequests WHERE tableno =' + tableno 
             +' AND requestCode = ' + requestCode + ';')
@@ -65,12 +65,13 @@ app.io.route('ioTableRequest', function(req){
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
                     + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
                 console.log("Successful POST to /api/v1/tableRequest");
-                req.io.respond()
+                data.numberofrequests = currentCount;
+                
             }else{
                 client.query('INSERT INTO restaurantRequests(tableno, request, requestCode) VALUES '
                      + '(' + tableno + ',\'' + request + '\',' + requestCode + ');');
                 console.log("Successful POST to /api/v1/tableRequest");
-                req.io.respond()
+                
             }
             client.end()
         });
@@ -78,6 +79,9 @@ app.io.route('ioTableRequest', function(req){
             console.log(err)
         }
     })
+    
+    req.io.broadcast('newRow', data);
+    req.io.respond()
 })
 
 app.listen(3000)
