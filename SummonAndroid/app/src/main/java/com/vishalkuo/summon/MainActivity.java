@@ -40,14 +40,13 @@ public class MainActivity extends Activity {
         checkBtn = (Button)findViewById(R.id.checkBtn);
         orderBtn = (Button)findViewById(R.id.orderBtn);
         customBtn = (Button)findViewById(R.id.customBtn);
-        welcomeView = (TextView)findViewById(R.id.welcomeView);
-        welcomeView.setText("You are currently at table: " + tableNo);
+
         c = this;
 
         actionBar = getActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        actionBar.setTitle("Table: " + tableNo);
         /**
          * On click listeners
          */

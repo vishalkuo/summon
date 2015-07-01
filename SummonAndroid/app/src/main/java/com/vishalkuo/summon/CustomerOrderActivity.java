@@ -34,11 +34,13 @@ public class CustomerOrderActivity extends Activity {
     private AlertDialog alertDialog;
     private ActionBar actionBar;
     private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_order);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        progressBar = (ProgressBar)findViewById(R.id.spinner);
 
         recyclerView.setHasFixedSize(true);
 
@@ -133,6 +135,12 @@ public class CustomerOrderActivity extends Activity {
         private MenuItemAdapter itemAdapter;
         public OnAsyncFinish delegate = null;
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
         public recycleInflater(OnAsyncFinish delegate) {
             this.delegate = delegate;
         }
@@ -156,7 +164,7 @@ public class CustomerOrderActivity extends Activity {
         @Override
         protected void onPostExecute(MenuItemAdapter s) {
             super.onPostExecute(s);
-
+            progressBar.setVisibility(View.GONE);
             recyclerView.setAdapter(s);
 
             final GestureDetector GESTUREDETECTOR = new GestureDetector(c, new GestureDetector.SimpleOnGestureListener(){

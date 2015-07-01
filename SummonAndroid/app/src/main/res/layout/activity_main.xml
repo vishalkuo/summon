@@ -5,6 +5,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></LinearLayout>
+    <TextView
+        android:id = "@+id/genie"
+        android:text="Request?"
+        android:textSize="50dp"
+        android:textStyle="bold|italic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textColor="@color/toastOrange"/>
+
 
     <LinearLayout
         android:id = "@+id/linearParent"
@@ -24,17 +38,17 @@
                 android:id="@+id/refillBtn"
                 android:text="Refill"
                 android:layout_weight=".5"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:elevation="5dp"
-                android:layout_height="match_parent"
+                android:layout_height="fill_parent"
                 android:textSize="12sp" />
             <Button
                 android:id="@+id/checkBtn"
                 android:text="Check"
                 android:elevation="5dp"
                 android:layout_weight=".5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:textSize="12sp" />
         </LinearLayout>
         <LinearLayout
@@ -63,13 +77,4 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id = "@+id/welcomeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/linearParent"
-        android:layout_marginBottom="20dp"
-        />
 </RelativeLayout>

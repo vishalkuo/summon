@@ -90,20 +90,31 @@ app.io.route('ioTableRequest', function(req){
                 currentCount += 1
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
                     + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
-                console.log("Successful POST to /api/v1/tableRequest");
-                data.numberofrequests = currentCount;                
-                
+                data.numberofrequests = currentCount; 
+                data.idVal = results[0].id;
+
+                data.update = true;               
+                req.io.broadcast('newRow', data);
             }else{
                 client.query('INSERT INTO restaurantRequests(tableno, request, requestCode) VALUES '
                      + '(' + tableno + ',\'' + request + '\',' + requestCode + ');');
-                console.log("Successful POST to /api/v1/tableRequest");
+                
+                var idQuery = client.query('SELECT id FROM restaurantRequests WHERE tableno =' + tableno 
+            +' AND requestCode = ' + requestCode + ';')
+
+                idQuery.on('row', function(row){
+                    data.idVal   = row[0].id;
+                    data.update = false;
+                    req.io.broadcast('newRow', data);
+                })
                 
             }
-            req.io.broadcast('newRow', data);
             client.end()
         });
         if (err){
             console.log(err)
+        }else{
+            console.log("Successful POST to /api/v1/tableRequest");
         }
     })
     
