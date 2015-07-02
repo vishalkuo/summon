@@ -91,7 +91,7 @@ app.io.route('ioTableRequest', function(req){
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
                     + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
                 data.numberofrequests = currentCount; 
-                data.idVal = results[0].id;
+                data.idVal = results[results.length - 1].id;
 
                 data.update = true;               
                 req.io.broadcast('newRow', data);
