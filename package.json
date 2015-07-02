@@ -13,6 +13,7 @@
     "body-parser": "^1.13.1",
     "express.io": "^1.1.13",
     "jade": "*",
+    "johnny-five": "^0.8.81",
     "pg": "^4.4.0"
   }
 }

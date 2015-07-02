@@ -108,7 +108,7 @@ app.io.route('ioTableRequest', function(req){
                 })
 
                 idQuery.on('end', function(){
-                    data.idVal   = test[test.length -1]
+                    data.idVal   = test[0]
                     data.update = false;
                     req.io.broadcast('newRow', data);
                     client.end()
