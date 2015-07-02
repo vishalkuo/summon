@@ -17,7 +17,7 @@ app.locals.pretty = true;
 app.get('/', function(req, res){
     var results = []
     pg.connect(connString, function(err, client, done){
-        var query = client.query("SELECT * FROM restaurantRequests WHERE completed = false");
+        var query = client.query("SELECT * FROM restaurantRequests WHERE completed = false ORDER BY currenttime ASC");
 
 
         query.on('row', function(row) {
@@ -91,7 +91,7 @@ app.io.route('ioTableRequest', function(req){
                 client.query('UPDATE restaurantRequests SET numberofrequests = ' + currentCount
                     + ' WHERE tableno = ' + tableno + ' and requestCode = ' + requestCode + ';');
                 data.numberofrequests = currentCount; 
-                data.idVal = results[results.length - 1].id;
+                data.idVal = results[0].id;
 
                 data.update = true;               
                 req.io.broadcast('newRow', data);
@@ -107,8 +107,9 @@ app.io.route('ioTableRequest', function(req){
                     test.push(row);
                 })
 
+
                 idQuery.on('end', function(){
-                    data.idVal   = test[0]
+                    data.idVal   = test[0].id
                     data.update = false;
                     req.io.broadcast('newRow', data);
                     client.end()
